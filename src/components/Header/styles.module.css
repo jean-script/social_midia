@@ -1,0 +1,39 @@
+
+
+.header {
+    height: 76px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px;
+    background-color: #1877F2;
+}
+
+.header h1 {
+    text-transform: uppercase;
+    color: #FFF;
+}
+
+.btnMenu {
+    background:transparent;
+    cursor: pointer;
+    border: 0;
+    transition: all 0.3s;
+}
+
+.btnMenu:hover{
+    transform: scale(1.1);
+}
+
+.btnGoogle {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 90px;
+    background-color: #FFF;
+    border: 0;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+}
