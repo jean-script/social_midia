@@ -1,5 +1,13 @@
 ## Social Midia
 
+Rápida descrição do objetivo de fazer esse projeto
+
+| :placard: Vitrine.Dev |     |
+| -------------  | --- |
+| :sparkles: Nome        | *Social Midia**
+| :label: Tecnologias | Reactjs, html, css, javaScript
+| :rocket: URL         | https://socials-midias.netlify.app/
+
 Um site baseado em uma rede social, com sistema de autenticação, validação de usuário e cadastros. Praticando os conhecimentos em ReactJS, JavaScript, html, css, firebase, rotas, React hooks e context API.
 
 
