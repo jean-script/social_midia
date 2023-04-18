@@ -4,6 +4,8 @@ import styles from './signIn.module.css'
 
 import { AuthContext } from '../../contexts/auth';
 
+import { toast } from 'react-toastify';
+
 export default function SignIn(){
 
     const { signIn, loadingAuth } = useContext(AuthContext);
@@ -19,7 +21,7 @@ export default function SignIn(){
           signIn(email,password)
     
         } else {
-          alert('Preencha todos os campos!');
+          toast.warn('Preencha todos os campos!');
           return;
         }
     

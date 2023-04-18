@@ -22,7 +22,7 @@ export default function Register(){
             setPassword('');
 
         } else {
-            alert('Preencha todos os campos');
+            toast.warn('Preencha todos os campos');
             return;
         }
 
