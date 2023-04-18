@@ -8,7 +8,8 @@ Rápida descrição do objetivo de fazer esse projeto
 | :label: Tecnologias | Reactjs, html, css, javaScript
 | :rocket: URL         | https://socials-midias.netlify.app/
 
-<img src'https://github.com/jean-script/social_midia/blob/main/src/assets/socials-midias.png?raw=true' width='200px'/>
+<!-- Inserir imagem com a #vitrinedev ao final do link -->
+![](https://github.com/jean-script/social_midia/blob/main/src/assets/socials-midias.png?raw=true/1200x500.png?text=#vitrinedev)
 
 Um site baseado em uma rede social, com sistema de autenticação, validação de usuário e cadastros. Praticando os conhecimentos em ReactJS, JavaScript, html, css, firebase, rotas, React hooks e context API.
 
