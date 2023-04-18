@@ -5,16 +5,20 @@ import styles from './styles.module.css'
 
 import Avatar from '../../assets/avatar.png'
 import Img from '../../assets/imgFundo.jpg'
-import { doc, updateDoc, getDocs, query, collection, orderBy, where, deleteDoc } from 'firebase/firestore'
+import { onSnapshot ,doc, updateDoc, getDocs, query, collection, orderBy, where, deleteDoc } from 'firebase/firestore'
 import { db, storge } from '../../services/firebaseConnection'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { FiTrash2 } from 'react-icons/fi';
 import { toast } from 'react-toastify'
 
+import Modal from 'react-modal';
+import ModalForm from '../../components/ModalForm'
+
 const listRef = collection(db, "posts");
 
 export default function Profile(){
+    const [modalvisible, setModalvisible] = useState(false);
 
     const { user, setUser, storgeUser } = useContext(AuthContext);
     const [nome, setNome] = useState(user && user.nome);
@@ -26,45 +30,73 @@ export default function Profile(){
 
     const [PanerAvatar, setPanerAvatar] = useState(null);
     const [PanerUrl, setPanerUrl] = useState(user && user.PanerUrl);
-    
 
     useEffect(()=>{
+        async function loadPost(){
+            const q = query(listRef, orderBy("created", 'desc'),where("userUid", '==', user.uid));
+           
+            const unsub = onSnapshot(q, (snapshot)=>{
+                let lista = [];
 
-        async function loadPosts(){
+                snapshot.forEach(doc => {
+                    lista.push({
+                        created:doc.data().created,
+                        describe: doc.data().describe,
+                        image: doc.data().imageURl,
+                        usuario: doc.data().usuario,
+                        usuarioImg: doc.data().usuarioImg,
+                        uid:doc.id,
+                        userUid: doc.data().userUid
+                    })
+                });
 
-            const q = query(listRef, orderBy("created", 'desc'), where("userUid", '==', user.uid));
+                setPosts(lista);
+
+            })
+
+        }
+
+        loadPost()
+    },[])
+    
+
+    // useEffect(()=>{
+
+    //     async function loadPosts(){
+
+    //         const q = query(listRef, orderBy("created", 'desc'), where("userUid", '==', user.uid));
             
-            const querySnapshot = await getDocs(q);
-            setPosts([]);
-            await updateState(querySnapshot);
+    //         const querySnapshot = await getDocs(q);
+    //         setPosts([]);
+    //         await updateState(querySnapshot);
 
-        }
+    //     }
 
-        loadPosts();
+    //     loadPosts();
 
-    },[user.uid])
+    // },[user.uid])
 
-    async function updateState(querySnapshot){
-        const isCollectionEmpy = querySnapshot.size === 0;
+    // async function updateState(querySnapshot){
+    //     const isCollectionEmpy = querySnapshot.size === 0;
 
-        if (!isCollectionEmpy) {
-            let lista = [];
-            querySnapshot.forEach(doc => {
-                lista.push({
-                    created:doc.data().created,
-                    describe: doc.data().describe,
-                    image: doc.data().imageURl,
-                    usuario: doc.data().usuario,
-                    usuarioImg: doc.data().usuarioImg,
-                    uid: doc.id
-                })
-            });
+    //     if (!isCollectionEmpy) {
+    //         let lista = [];
+    //         querySnapshot.forEach(doc => {
+    //             lista.push({
+    //                 created:doc.data().created,
+    //                 describe: doc.data().describe,
+    //                 image: doc.data().imageURl,
+    //                 usuario: doc.data().usuario,
+    //                 usuarioImg: doc.data().usuarioImg,
+    //                 uid: doc.id
+    //             })
+    //         });
 
-            setPosts(posts => [...posts, ...lista]);
+    //         setPosts(posts => [...posts, ...lista]);
 
-        }
+    //     }
 
-    }
+    // }
 
     function handleFile(e){
         if(e.target.files[0]){
@@ -216,11 +248,20 @@ export default function Profile(){
             }
         }
     }
+    function handleOpenModal(){
+        setModalvisible(true);
+    }
+
+    function handleCloseModal(){
+        setModalvisible(false);
+    }
+    
+    Modal.setAppElement("#root");
     
     return(
         <main className={styles.main}>
             <div className={styles.container}>
-                 
+     
                 <section className={styles.containerPerfilInfo}>
                     <form onSubmit={handleSubmit}>
                         <div className={styles.containerPerfil}>
@@ -260,7 +301,12 @@ export default function Profile(){
 
                 </section>
                 <section className={styles.sessaopubli}>
+
                     <h2 className={styles.meusPosts}>Meus Posts</h2>
+
+                    <div className={styles.newPublicacao}>
+                        <button type="button" onClick={()=> handleOpenModal()} className={styles.btnNewPublic}>O que você quer compartilhar?</button>
+                    </div>
 
                     {posts.length === 0 ? (
                         <>
@@ -304,6 +350,15 @@ export default function Profile(){
                     )}
 
                 </section>
+
+                { modalvisible &&(
+                    <ModalForm
+                        isOpen={modalvisible}
+                        handleCloseModal={handleCloseModal}
+                        user={user}
+                        listpost={setPosts}
+                    />
+                )}
 
 
             </div>

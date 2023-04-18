@@ -3,10 +3,10 @@ import styles from './dashboard.module.css'
 
 import { AuthContext } from '../../contexts/auth'
 import Modal from 'react-modal';
-
-import { collection, getDocs, orderBy, query, doc, deleteDoc } from 'firebase/firestore'
-import { db } from '../../services/firebaseConnection'
 import ModalForm from '../../components/ModalForm'
+
+import { collection, getDocs, orderBy, query, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
+import { db } from '../../services/firebaseConnection'
 import Avatar from '../../assets/avatar.png'
 
 import { FiTrash2 } from 'react-icons/fi';
@@ -23,44 +23,73 @@ export default function Home(){
     const [loadingPost, setLoadingPost] = useState(true);
 
     useEffect(()=>{
-
-        async function loadPosts(){
-
+        async function loadPost(){
             const q = query(listRef, orderBy("created", 'desc'));
-            
-            const querySnapshot = await getDocs(q);
-            setPosts([])
-            await updateState(querySnapshot);
            
+            const unsub = onSnapshot(q, (snapshot)=>{
+                let lista = [];
+
+                snapshot.forEach(doc => {
+                    lista.push({
+                        created:doc.data().created,
+                        describe: doc.data().describe,
+                        image: doc.data().imageURl,
+                        usuario: doc.data().usuario,
+                        usuarioImg: doc.data().usuarioImg,
+                        uid:doc.id,
+                        userUid: doc.data().userUid
+                    })
+                });
+
+                setPosts(lista);
+                setLoadingPost(false)
+
+            })
+
         }
 
-        loadPosts();
-
+        loadPost()
     },[])
 
-    async function updateState(querySnapshot){
-        const isCollectionEmpy = querySnapshot.size === 0;
+    // useEffect(()=>{
 
-        if (!isCollectionEmpy) {
-            let lista = [];
-            querySnapshot.forEach(doc => {
-                lista.push({
-                    created:doc.data().created,
-                    describe: doc.data().describe,
-                    image: doc.data().imageURl,
-                    usuario: doc.data().usuario,
-                    usuarioImg: doc.data().usuarioImg,
-                    uid:doc.id,
-                    userUid: doc.data().userUid
-                })
-            });
+    //     async function loadPosts(){
 
-            setPosts(posts => [...posts, ...lista]);
-            setLoadingPost(false)
+    //         const q = query(listRef, orderBy("created", 'desc'));
+            
+    //         const querySnapshot = await getDocs(q);
+    //         setPosts([])
+    //         await updateState(querySnapshot);
+           
+    //     }
 
-        }
+    //     loadPosts();
 
-    }
+    // },[])
+
+    // async function updateState(querySnapshot){
+    //     const isCollectionEmpy = querySnapshot.size === 0;
+
+    //     if (!isCollectionEmpy) {
+    //         let lista = [];
+    //         querySnapshot.forEach(doc => {
+    //             lista.push({
+    //                 created:doc.data().created,
+    //                 describe: doc.data().describe,
+    //                 image: doc.data().imageURl,
+    //                 usuario: doc.data().usuario,
+    //                 usuarioImg: doc.data().usuarioImg,
+    //                 uid:doc.id,
+    //                 userUid: doc.data().userUid
+    //             })
+    //         });
+
+    //         setPosts(posts => [...posts, ...lista]);
+    //         setLoadingPost(false)
+
+    //     }
+
+    // }
     
     function handleOpenModal(){
         setModalvisible(true);

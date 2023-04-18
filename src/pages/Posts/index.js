@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 
-import {doc, getDoc, getDocs, addDoc, collection, query, orderBy, where, deleteDoc} from 'firebase/firestore';
+import { onSnapshot ,doc, getDoc, getDocs, addDoc, collection, query, orderBy, where, deleteDoc} from 'firebase/firestore';
 
 import { db } from '../../services/firebaseConnection';
 import Avatar from '../../assets/avatar.png'
@@ -26,45 +26,71 @@ export default function Post(){
     const [comentario, setComentario] = useState('');
     const [listaComentario, setListaComentario] = useState([]);
 
-
     useEffect(()=>{
-
-        async function loadComentarios(){
-
+        async function loadPost(){
             const q = query(listRef, orderBy("created", 'desc'), where("postId", '==', id));
+           
+            const unsub = onSnapshot(q, (snapshot)=>{
+                let lista = [];
 
-            const querySnapshot = await getDocs(q);
-            setListaComentario([]);
-            await updateState(querySnapshot);
+                snapshot.forEach(doc => {
+                    lista.push({
+                        usuario: doc.data().usuario,
+                        comentario: doc.data().comentario,
+                        created:doc.data().created,
+                        userUrl: doc.data().userUrl,
+                        uid: doc.id
+                    })
+                });
+
+                setListaComentario(lista);
+
+            })
 
         }
 
-        loadComentarios()
+        loadPost()
+    },[])
 
-    },[id])
 
-   async function updateState(querySnapshot){
+//     useEffect(()=>{
 
-    const isCollectionEmpy = querySnapshot.size === 0;
+//         async function loadComentarios(){
 
-    if(!isCollectionEmpy){
-        let lista = [];
+//             const q = query(listRef, orderBy("created", 'desc'), where("postId", '==', id));
 
-        querySnapshot.forEach(doc => {
-            lista.push({
-                usuario: doc.data().usuario,
-                comentario: doc.data().comentario,
-                created:doc.data().created,
-                userUrl: doc.data().userUrl,
-                uid: doc.id
-            })
+//             const querySnapshot = await getDocs(q);
+//             setListaComentario([]);
+//             await updateState(querySnapshot);
 
-            setListaComentario(coment => [...lista, coment]);
+//         }
+
+//         loadComentarios()
+
+//     },[id])
+
+//    async function updateState(querySnapshot){
+
+//     const isCollectionEmpy = querySnapshot.size === 0;
+
+//     if(!isCollectionEmpy){
+//         let lista = [];
+
+//         querySnapshot.forEach(doc => {
+//             lista.push({
+//                 usuario: doc.data().usuario,
+//                 comentario: doc.data().comentario,
+//                 created:doc.data().created,
+//                 userUrl: doc.data().userUrl,
+//                 uid: doc.id
+//             })
+
+//             setListaComentario(coment => [...lista, coment]);
             
-        })
-    }
+//         })
+//     }
 
-   }
+//    }
 
     useEffect(()=>{
 
