@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext({});
 
@@ -50,13 +51,17 @@ function AuthProvider({children}){
                 uid:uid,
                 nome:docSnap.data().nome,
                 email:value.user.email,
-                avatarUrl:null
+                avatarUrl:docSnap.data().avatarUrl,
+                sobre:docSnap.data().sobre,
+                PanerUrl: docSnap.data().PanerUrl,
+                
             }
 
             setUser(data);
             storgeUser(data);
             setLoadingAuth(false);
             navigate("/dashboard");
+            toast.success('Bem vindo(a) de volta')
 
         })
         .catch((e)=>{
@@ -75,7 +80,7 @@ function AuthProvider({children}){
 
             await setDoc(doc(db, "users",uid),{
                nome:name,
-               avatarUrl:null 
+               avatarUrl:null
             })
             .then(()=>{
                 
@@ -83,19 +88,22 @@ function AuthProvider({children}){
                     uid:uid,
                     nome:name,
                     email:value.user.email,
-                    avatarUrl:null
+                    avatarUrl:null,
+                    sobre: ''
                 };
 
                 setUser(data);
                 storgeUser(data);
                 setLoadingAuth(false);
                 navigate('/dashboard');
+                toast.success('Bem vindo(a)')
             })
 
         })
         .catch((e)=>{
             setLoadingAuth(false)
             console.log(e);
+            toast.warn('Erro ao cadastrar')
         })
 
     }
@@ -103,6 +111,7 @@ function AuthProvider({children}){
     function logount(){
         setUser(null);
         localStorage.removeItem("@SocialUser");
+        toast.info('Deslogado!');
     }
 
     function storgeUser(data){
@@ -118,7 +127,9 @@ function AuthProvider({children}){
                 register,
                 loadingAuth,
                 loading,
-                logount
+                logount,
+                setUser,
+                storgeUser
             }}
         >
             {children}

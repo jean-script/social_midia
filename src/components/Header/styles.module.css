@@ -37,3 +37,20 @@
     padding: 4px;
     cursor: pointer;
 }
+
+.infoUser {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 200px;
+}
+
+.userProfile {
+    color: black;
+    transition: all o.3s;
+}
+
+.userProfile:hover{
+    transform: scale(1.1);
+}

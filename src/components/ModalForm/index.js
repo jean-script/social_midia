@@ -4,11 +4,12 @@ import { FiX } from 'react-icons/fi'
 
 import styles from './styles.module.css';
 
-import { doc, collection, addDoc } from 'firebase/firestore'
+import {  collection, addDoc } from 'firebase/firestore'
 import { db, storge } from '../../services/firebaseConnection'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { toast } from 'react-toastify';
 
-export default function ModalForm({ isOpen, handleCloseModal, user }){
+export default function ModalForm({ isOpen, handleCloseModal, user, setPost }){
 
     const [textarea, setTextarea] = useState('');
     const [image, setImage] = useState(null);
@@ -27,9 +28,8 @@ export default function ModalForm({ isOpen, handleCloseModal, user }){
     }
 
     async function handlePostImage(){
-        const currendtUid = user.uid;
 
-        const uploadRef = ref(storge, `images/${currendtUid}/${image.name}`)
+        const uploadRef = ref(storge, `images/posts/${image.name}`)
 
         const uploadTask = uploadBytes(uploadRef, image)
         .then((snapshot)=>{
@@ -39,17 +39,21 @@ export default function ModalForm({ isOpen, handleCloseModal, user }){
                 const docRef = addDoc(collection(db, "posts"),{
                     created: new Date(),
                     usuario: user.nome,
+                    usuarioImg: user.avatarUrl,
                     describe: textarea,
                     imageURl:urlFoto,
-                    emailUser: user.email
+                    emailUser: user.email,
+                    userUid: user.uid
                 })
                 .then(()=>{
                     setImage(null);
                     setTextarea('');
-                    alert('postado com sucesso!')
+                    toast.success('Postado com sucesso!')
+
                 })
                 .catch((e)=>{
                     console.log(e);
+                    toast.error('Ops! Houve erro')
                 })
             })
         })
@@ -64,17 +68,21 @@ export default function ModalForm({ isOpen, handleCloseModal, user }){
             await addDoc(collection(db, "posts"),{
                 created: new Date(),
                 usuario: user.nome,
+                usuarioImg: user.avatarUrl,
                 describe: textarea,
-                emailUser: user.email
+                imageURl:null,
+                emailUser: user.email,
+                userUid: user.uid
             })
             .then(()=>{
-                setTextarea('');
-                alert('Postado com sucesso!')
+                setTextarea('');  
+                
+                toast.success('Postado com sucesso!')
             })
             .catch((e)=>{
                 console.log(e);
                 setTextarea('');
-                alert('Error')
+                toast.error('Error')
             })
         } else if(textarea !== "" && image !== null){
             // post com image
@@ -104,6 +112,7 @@ export default function ModalForm({ isOpen, handleCloseModal, user }){
             handleCloseModal={handleCloseModal}
             user={user}
             style={customStyles}
+            listpost={setPost}
         >
             <div className={styles.container}>
                 <div className={styles.infoUser}>
@@ -130,7 +139,7 @@ export default function ModalForm({ isOpen, handleCloseModal, user }){
                     <div className={styles.formImage}>
                         <input type='file' accept='image/*' onChange={handleFile}/>
                         {image && (
-                            <img src={imageUrl} alt='imagem url'/>
+                            <img src={imageUrl} alt='imagem url' className={styles.imgPost}/>
                         )}
 
                     </div>

@@ -10,13 +10,15 @@ export default function Header(){
 
     return(
         <header className={styles.header}>
-            <Link to="/">
+            <Link to={!signed ? "/": "/dashboard"}>
                 <h1>Social Mídia</h1>
             </Link>
 
             {signed && (
-                <div>
-                    {user.nome}
+                <div className={styles.infoUser}>
+                    <Link to={`/profile/${user.uid}`} className={styles.userProfile}>
+                        {user.nome}
+                    </Link>
                     <button type='button' className={styles.btnGoogle} onClick={()=> logount()}>
                         Sair
                     </button>

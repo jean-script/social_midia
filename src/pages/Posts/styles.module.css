@@ -21,28 +21,6 @@
     max-width: 750px;
 }
 
-.newPublicacao {
-    padding: 14px;
-    background-color: #fff;
-    margin-bottom: 14px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btnNewPublic {
-    padding: 5px;
-    height: 40px;
-    width: 100%;
-    max-width: 350px;
-    border-radius: 18px;
-    border: 1px solid #787878;
-    background-color: #33ba06;
-    color: #fff;
-    font-size: 18px;
-}
-
 .publicacao {
     width: 100%;
     display: flex;
@@ -111,4 +89,28 @@
     background: transparent;
     border: 0;
     padding: 5px;
+}
+
+.btnComentar {
+    background-color: #33ba06;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px;
+    height: 40px;
+    border-radius: 4px;
+    border: 0;
+    margin: 25px 0 0px 0;
+    width: 100px;
+    cursor: pointer;
+}
+
+.form textarea {
+    width: 100%;
+    resize: none;
+    border: 1px solid #787878;
+    padding: 5px;
+    font-size: 18px;
+    height: 250px;
+    margin-top: 14px;
 }

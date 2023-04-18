@@ -1,0 +1,188 @@
+
+
+.main{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.containerPerfilInfo {
+    background-color: #fff;
+    width: 100%;
+    border-radius: 5px;
+    padding-bottom: 5px;
+}
+
+.containerPerfil {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.paner {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.imgPerfil{
+    position: absolute;
+    top: 86%;
+    margin: auto;
+    max-width: 30%;
+    border-radius: 90px;
+    width: 140px;
+    height: auto;
+    border: 3px solid #cacaca;
+}
+
+.paner {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border: 3px solid #cacaca;
+}
+
+
+.inputImg {
+    display: none;
+}
+
+.perfilInfo {
+    margin-top: 85px;
+    padding: 0 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.perfilInfo input {
+    max-width: 200px;
+    padding: 5px;
+    margin-bottom: 14px;
+    border: 1px solid #bcbbbb;
+    border-radius: 4px;
+}
+
+.perfilInfo input:disabled {
+    cursor: no-drop;
+}
+
+.btnAtualizar {
+    padding: 5px;
+    width: 20%;
+    background-color: #1877F2;
+    border: 0;
+    height: 40px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.5s;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+
+/* post */
+
+.meusPosts {
+    padding: 10px;
+    margin: 14px 0;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.publicacao {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    padding: 14px;
+    margin-bottom: 14px;
+    border-radius: 5px;
+}
+
+.infoUser {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.infoUser div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.infoUser h2 {
+    font-size: 18px;
+    color: #0f0f0f;
+}
+
+.infoUser span {
+    font-size: 14px;
+    color: #787878;
+}
+
+.imgPubli {
+    width: 100%;
+    height: 600px;
+    object-fit: contain;
+}
+
+.imgUser {
+    width: 45px;
+    border: 1px solid var(--cor-cinza);
+    border-radius: 18px;
+}
+
+.descricaoPubli {
+    color: #393939;
+    white-space: pre-wrap;
+    margin-bottom: 14px;
+}
+
+.userImgInfo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.userImg {
+    border-radius: 18px;
+}
+
+.sessaopubli {
+    width: 100%;
+    max-width: 750px;
+}
+
+.inputSobre {
+    resize: none;
+    border: 0;
+    padding: 5px;
+    font-size: 18px;
+    height: 100px;
+    width: 50%;
+    margin-bottom: 14px;
+}
+
+.btnTrash {
+    background: transparent;
+    border: 0;
+    padding: 5px;
+}

@@ -4,9 +4,14 @@ import styles from './dashboard.module.css'
 import { AuthContext } from '../../contexts/auth'
 import Modal from 'react-modal';
 
-import { collection, getDocs, orderBy, startAfter, query } from 'firebase/firestore'
+import { collection, getDocs, orderBy, query, doc, deleteDoc } from 'firebase/firestore'
 import { db } from '../../services/firebaseConnection'
 import ModalForm from '../../components/ModalForm'
+import Avatar from '../../assets/avatar.png'
+
+import { FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const listRef = collection(db, "posts");
 
@@ -26,7 +31,7 @@ export default function Home(){
             const querySnapshot = await getDocs(q);
             setPosts([])
             await updateState(querySnapshot);
-
+           
         }
 
         loadPosts();
@@ -43,14 +48,16 @@ export default function Home(){
                     created:doc.data().created,
                     describe: doc.data().describe,
                     image: doc.data().imageURl,
-                    usuario: doc.data().usuario
+                    usuario: doc.data().usuario,
+                    usuarioImg: doc.data().usuarioImg,
+                    uid:doc.id,
+                    userUid: doc.data().userUid
                 })
             });
 
             setPosts(posts => [...posts, ...lista]);
             setLoadingPost(false)
 
-            console.log(lista);
         }
 
     }
@@ -61,6 +68,23 @@ export default function Home(){
 
     function handleCloseModal(){
         setModalvisible(false);
+    }
+
+    async function handleRemovePost(id){
+        const docRef = doc(db, "posts", id);
+
+        await deleteDoc(docRef)
+        .then(()=>{
+            toast.success('Poste deletado com sucesso!')
+            let listaposts = posts.filter(item => item.uid !== id)
+
+            setPosts(listaposts);
+        })
+        .catch((e)=>{
+            console.log(e);
+            toast.warn('Ops! Houve erro ao deletar!');
+        })
+
     }
 
     Modal.setAppElement("#root");
@@ -91,8 +115,23 @@ export default function Home(){
                                             <article className={styles.publicacao} key={index}>
                                                 <div className={styles.infoUser}>
                                                     <div>
-                                                        <h2>{post.usuario}</h2>
-                                                        <span></span>
+                                                        <div className={styles.userImgInfo}>
+                                                            {post.usuarioImg ? (
+                                                                <img src={post.usuarioImg} alt='' width={40} height={40} className={styles.userImg}/>
+
+                                                            ): (
+                                                                <img src={Avatar} alt='' width={40} height={40} className={styles.userImg}/>
+                                                            )}
+                                                            <Link to={`/post/${post.uid}`}>
+                                                                <h2>{post.usuario}</h2>
+                                                            </Link>
+                                                        </div>
+                                                        {post.userUid === user.uid &&(
+                                                            <button className={styles.btnTrash} onClick={ ()=> handleRemovePost(post.uid)}>
+                                                                <FiTrash2 size={25} color='#CF0E0E'/>
+                                                            </button>
+                                                        )}
+
                                                     </div>
                                                 </div>
                                                 <p className={styles.descricaoPubli}>
@@ -119,6 +158,7 @@ export default function Home(){
                 isOpen={modalvisible}
                 handleCloseModal={handleCloseModal}
                 user={user}
+                listpost={setPosts}
             />
            )}
 
