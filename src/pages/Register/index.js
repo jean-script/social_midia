@@ -4,6 +4,8 @@ import styles from './register.module.css'
 
 import { AuthContext } from '../../contexts/auth';
 
+import { toast } from 'react-toastify';
+
 export default function Register(){
 
     const { register, loadingAuth } = useContext(AuthContext)
